@@ -1,0 +1,178 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .import-container {
+        max-width: 700px;
+        margin: 30px auto;
+        padding: 30px;
+        background: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        color: #333333;
+    }
+    .import-header {
+        border-bottom: 2px solid #f4f4f4;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+    }
+    .import-header h2 {
+        margin: 0;
+        color: #1a2a3a;
+        font-size: 24px;
+        font-weight: 600;
+    }
+    .download-section {
+        background: #fdfaf6;
+        border-left: 4px solid #c5a880;
+        padding: 15px 20px;
+        margin-bottom: 25px;
+        border-radius: 0 6px 6px 0;
+    }
+    .download-section p {
+        margin: 0 0 10px 0;
+        font-weight: 500;
+        color: #555;
+    }
+    .btn-template {
+        display: inline-block;
+        background-color: #c5a880;
+        color: #0d1b2a !important;
+        font-weight: bold;
+        padding: 8px 16px;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: background 0.3s;
+    }
+    .btn-template:hover {
+        background-color: #b3976f;
+    }
+    .form-group {
+        margin-bottom: 25px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #333;
+    }
+    .file-input-wrapper {
+        border: 2px dashed #cccccc;
+        padding: 30px;
+        text-align: center;
+        border-radius: 6px;
+        cursor: pointer;
+        background: #fafafa;
+        transition: border 0.3s;
+    }
+    .file-input-wrapper:hover {
+        border-color: #c5a880;
+    }
+    .file-input-wrapper input[type="file"] {
+        display: block;
+        margin: 15px auto 0 auto;
+    }
+    .instructions {
+        margin-top: 25px;
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 6px;
+        border: 1px solid #eaeaea;
+    }
+    .instructions h4 {
+        margin: 0 0 12px 0;
+        color: #0d1b2a;
+        font-weight: 600;
+    }
+    .instructions ul {
+        margin: 0;
+        padding-left: 20px;
+        color: #555;
+        font-size: 13.5px;
+        line-height: 1.6;
+    }
+    .btn-submit {
+        background: #0d1b2a;
+        color: #ffffff !important;
+        border: none;
+        padding: 12px 24px;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .btn-submit:hover {
+        background: #1a2a3a;
+    }
+    .btn-cancel {
+        background: #eaeaea;
+        color: #333333 !important;
+        border: none;
+        padding: 12px 24px;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        margin-left: 10px;
+        display: inline-block;
+    }
+    .btn-cancel:hover {
+        background: #d8d8d8;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <div class="import-container">
+        <div class="import-header">
+            <h2>Import Gallery Items from Excel</h2>
+            <p class="subtitle">Bulk upload multiple gallery items and automatically download their photos using a spreadsheet.</p>
+        </div>
+
+        <div class="download-section">
+            <p>Need a guide on formatting? Download our pre-configured Excel Template:</p>
+            <a href="../download-template/" class="btn-template">
+                <i class="fas fa-download" style="margin-right: 5px;"></i> Download Template (.xlsx)
+            </a>
+        </div>
+
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="excel_file">Select Excel File (.xlsx)</label>
+                <div class="file-input-wrapper" onclick="document.getElementById('excel_file').click();">
+                    <i class="fas fa-file-excel fa-3x" style="color: #c5a880; margin-bottom: 10px;"></i>
+                    <p style="margin: 0; font-weight: 500;">Click to select file or drag it here</p>
+                    <input type="file" name="excel_file" id="excel_file" accept=".xlsx" required style="display: none;" onchange="document.getElementById('file-chosen').textContent = this.files[0].name;">
+                    <span id="file-chosen" style="display: block; margin-top: 10px; font-weight: bold; color: #1a2a3a;">No file selected</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-upload" style="margin-right: 5px;"></i> Run Import Process
+                </button>
+                <a href="../" class="btn-cancel">Cancel</a>
+            </div>
+        </form>
+
+        <div class="instructions">
+            <h4>Spreadsheet Formatting Rules</h4>
+            <ul>
+                <li><strong>Title:</strong> The name of the project (e.g. <i>Kanyakumari Villa</i>). Optional.</li>
+                <li><strong>Category:</strong> Must be exactly one of: <code>villas</code>, <code>interiors</code>, <code>commercial</code>, or <code>renovation</code> (lowercase, spelling matters).</li>
+                <li><strong>Image URL:</strong> A fully qualified HTTP or HTTPS link to the image (e.g. <i>https://images.unsplash.com/...</i>). The backend will automatically fetch this file and save it in the database.</li>
+                <li><strong>Description:</strong> Brief text or details about the project. Optional.</li>
+                <li><strong>Order:</strong> An integer (e.g., <code>1</code>, <code>2</code>, <code>3</code>) to set display order. Defaults to <code>0</code>.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
