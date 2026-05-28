@@ -11,8 +11,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Poppins:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}">
 <meta name="csrf-token" content="{{ csrf_token }}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 
@@ -24,8 +26,10 @@
     <a class="navbar-brand" href="#">
       <img src="https://res.cloudinary.com/dgxrbt5yn/image/upload/v1779433719/bafe0c28-7c9c-4c5c-8165-b985af9ffaba.png" class="brand-logo" alt="Ruthra Architects">
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="toggler-icon top-bar"></span>
+      <span class="toggler-icon middle-bar"></span>
+      <span class="toggler-icon bottom-bar"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navMenu">
       <ul class="navbar-nav gap-1">
@@ -92,7 +96,7 @@
         <div class="founder-card fade-in">
           <div class="founder-img-wrap">
             <div class="founder-img-placeholder">
-              <img src="https://res.cloudinary.com/dsihtwqcu/image/upload/v1779475616/WhatsApp_Image_2026-05-23_at_12.14.30_AM_uxbsmx.jpg" class="fun" alt="founder">
+             <i class="material-icons fun">&#xe7fd;</i>
             </div>
           </div>
           <div class="founder-info">
@@ -327,17 +331,21 @@
       <h2 class="section-title white">Project Gallery</h2>
       <p style="color:rgba(255,255,255,.4);font-size:12px;max-width:480px;margin:0 auto;">"We are Not Selling Plans, We are Design your dream into Realit"</p>
     </div>
-    <div class="d-flex align-items-center flex-wrap gap-3 mb-3 fade-in">
-      <div class="gallery-filters">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="villas">Villas</button>
-        <button class="filter-btn" data-filter="interiors">Interiors</button>
-        <button class="filter-btn" data-filter="commercial">Commercial</button>
-        <button class="filter-btn" data-filter="renovation">Renovation</button>
+    <div class="d-flex align-items-center flex-wrap gap-3 mb-4 fade-in">
+      <div class="gallery-filters" id="galleryFilters">
+        <!-- Dynamically rendered category buttons -->
       </div>
       <span class="gallery-count-badge" id="galleryCount"></span>
     </div>
-    <div class="container-fluid gallery-grid" id="galleryGrid"></div>
+    <div class="gallery-slider-viewport">
+      <!-- Swiper Slider Container -->
+      <div class="swiper gallery-swiper">
+        <div class="swiper-wrapper" id="galleryGrid"></div>
+      </div>
+      <!-- Premium Cinematic Navigation buttons outside swiper-wrapper but inside viewport -->
+      <button class="swiper-nav-btn swiper-nav-prev" id="swiperPrevBtn" aria-label="Previous project"><i class="fas fa-chevron-left"></i></button>
+      <button class="swiper-nav-btn swiper-nav-next" id="swiperNextBtn" aria-label="Next project"><i class="fas fa-chevron-right"></i></button>
+    </div>
     <div id="galleryEmpty" class="gallery-empty" style="display:none;">
       <i class="fas fa-images"></i>
       No images yet. 
@@ -348,15 +356,25 @@
 <!-- ============================================================
      LIGHTBOX
 ============================================================ -->
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close" id="lightboxClose"><i class="fas fa-times"></i></button>
-  <button class="lightbox-nav lightbox-prev" id="lightboxPrev"><i class="fas fa-chevron-left"></i></button>
-  <img id="lightboxImg" src="" alt="">
-  <button class="lightbox-nav lightbox-next" id="lightboxNext"><i class="fas fa-chevron-right"></i></button>
-  <div class="lightbox-info">
-    <div class="lightbox-title" id="lightboxTitle"></div>
-    <div class="lightbox-cat" id="lightboxCat"></div>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Project details">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close lightbox"><i class="fas fa-times"></i></button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous image"><i class="fas fa-chevron-left"></i></button>
+  
+  <div class="lightbox-container">
+    <div class="lightbox-img-wrap">
+      <img id="lightboxImg" src="" alt="">
+    </div>
+    <div class="lightbox-metadata">
+      <div class="lightbox-meta-top">
+        <span class="lightbox-cat" id="lightboxCat"></span>
+        <div class="lightbox-location" id="lightboxLoc" style="display: none;"><i class="fas fa-map-marker-alt"></i> <span></span></div>
+      </div>
+      <h3 class="lightbox-title" id="lightboxTitle"></h3>
+      <p class="lightbox-desc" id="lightboxDesc"></p>
+    </div>
   </div>
+  
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next image"><i class="fas fa-chevron-right"></i></button>
 </div>
 
 <!-- ============================================================
@@ -810,6 +828,10 @@
 <!-- BOOTSTRAPPED SQL DATA -->
 <script id="gallery-data" type="application/json">{{ gallery_items_json|safe }}</script>
 
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="{% static 'portfolio/js/script.js' %}"></script>
 </body>
 </html>

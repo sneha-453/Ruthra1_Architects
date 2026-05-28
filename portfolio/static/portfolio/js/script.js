@@ -9,6 +9,7 @@ let currentFilter = 'all';
 let lightboxIndex = 0;
 let visibleItems = [];
 let isAdminLoggedIn = false;
+let gallerySwiper = null;
 
 /* ============================================================
    CSRF TOKEN HELPER
@@ -52,6 +53,9 @@ function loadGallery() {
     console.error("Error loading bootstrapped gallery data:", e);
     galleryItems = [];
   }
+  
+  // Render dynamic category filter buttons
+  renderCategoryFilters();
 }
 
 async function syncGallery() {
@@ -60,6 +64,7 @@ async function syncGallery() {
     if (res.ok) {
       galleryItems = await res.json();
       galleryItems.sort((a,b)=>(a.order||0)-(b.order||0));
+      renderCategoryFilters();
       renderGallery();
       if (document.getElementById('adminDrawer').classList.contains('open')) {
         renderManageList();
@@ -72,7 +77,58 @@ async function syncGallery() {
 }
 
 /* ============================================================
-   GALLERY RENDER
+   GALLERY FILTERS (DYNAMIC CATEGORIES)
+============================================================ */
+function renderCategoryFilters() {
+  const filterContainer = document.getElementById('galleryFilters');
+  if (!filterContainer) return;
+
+  // Compile unique categories from visible items
+  const uniqueCats = ['all', ...new Set(galleryItems.filter(item => item.visible).map(item => item.category))];
+
+  filterContainer.innerHTML = uniqueCats.map(cat => {
+    const label = cat === 'all' ? 'All' : catLabel(cat);
+    const activeClass = cat === currentFilter ? 'active' : '';
+    return `<button class="filter-btn ${activeClass}" data-filter="${cat}" role="tab" aria-selected="${cat === currentFilter}" tabindex="0">${label}</button>`;
+  }).join('');
+
+  // Click & Keyboard handlers
+  filterContainer.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+      const swiperContainer = document.querySelector('.gallery-swiper');
+      
+      // Client-side fade out/in animation for filtering
+      if (swiperContainer) {
+        swiperContainer.classList.add('filtering');
+      }
+
+      setTimeout(() => {
+        currentFilter = filter;
+        renderGallery();
+        
+        filterContainer.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.filter === filter);
+          b.setAttribute('aria-selected', b.dataset.filter === filter);
+        });
+
+        if (swiperContainer) {
+          swiperContainer.classList.remove('filtering');
+        }
+      }, 300);
+    });
+
+    btn.addEventListener('keydown', e => {
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        btn.click();
+      }
+    });
+  });
+}
+
+/* ============================================================
+   GALLERY RENDER (SWIPER SLIDER SYSTEM)
 ============================================================ */
 function renderGallery(filter) {
   currentFilter = filter || currentFilter;
@@ -80,8 +136,7 @@ function renderGallery(filter) {
   const empty = document.getElementById('galleryEmpty');
   const countBadge = document.getElementById('galleryCount');
   
-  // If not logged in, only show visible images.
-  // If logged in as admin, show all (or filter).
+  // Filter visible items
   const filtered = galleryItems.filter(item => {
     const isVisible = item.visible;
     const catMatch = (currentFilter === 'all' || item.category === currentFilter);
@@ -94,23 +149,126 @@ function renderGallery(filter) {
   if (!filtered.length) { 
     grid.innerHTML=''; 
     empty.style.display='block'; 
+    if (gallerySwiper) {
+      gallerySwiper.destroy(true, true);
+      gallerySwiper = null;
+    }
     return; 
   }
   
   empty.style.display='none';
   grid.innerHTML = filtered.map((item,idx)=>`
-    <div class="gallery-item" data-index="${idx}" data-id="${item.id}">
-      <img src="${item.src}" alt="${item.title||item.category}" loading="lazy">
-      <div class="gallery-overlay">
-        <div class="gallery-overlay-icon"><i class="fas fa-expand-alt"></i></div>
-        <div class="gallery-overlay-cat">${catLabel(item.category)}</div>
-        ${item.title?`<div class="gallery-overlay-title">${item.title}</div>`:''}
+    <div class="swiper-slide" data-index="${idx}" data-id="${item.id}" tabindex="0" aria-label="Project slide ${idx + 1}">
+      <img src="${item.src}" alt="${item.title||catLabel(item.category)}" loading="lazy">
+      <div class="slide-overlay">
+        <div class="slide-overlay-content">
+          <span class="slide-overlay-cat">${catLabel(item.category)}</span>
+          ${item.title?`<h3 class="slide-overlay-title">${item.title}</h3>`:''}
+          <div class="slide-overlay-meta">
+            <span><i class="fas fa-expand-alt"></i> View Details</span>
+          </div>
+          <div class="slide-overlay-divider"></div>
+        </div>
       </div>
     </div>`).join('');
     
-  grid.querySelectorAll('.gallery-item').forEach(el=>{
-    el.addEventListener('click',()=>openLightbox(parseInt(el.dataset.index)));
+  // Initialize/rebuild the premium Swiper slider
+  initGallerySwiper();
+}
+
+/* ============================================================
+   SWIPER INITIALIZATION
+============================================================ */
+function initGallerySwiper() {
+  if (gallerySwiper) {
+    gallerySwiper.destroy(true, true);
+    gallerySwiper = null;
+  }
+
+  const swiperContainer = document.querySelector('.gallery-swiper');
+  if (!swiperContainer) return;
+
+  const slideCount = document.querySelectorAll('.gallery-swiper .swiper-slide').length;
+  // loop requires a minimum slide count
+  const canLoop = slideCount >= 3;
+
+  gallerySwiper = new Swiper('.gallery-swiper', {
+    centeredSlides: true,
+    loop: canLoop,
+    speed: 3000,
+    autoplay: {
+      delay: 0,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true
+    },
+    navigation: {
+      prevEl: '#swiperPrevBtn',
+      nextEl: '#swiperNextBtn',
+    },
+    keyboard: {
+      enabled: true,
+      onlyInViewport: true,
+    },
+    a11y: {
+      prevSlideMessage: 'Previous project',
+      nextSlideMessage: 'Next project',
+      firstSlideMessage: 'This is the first project',
+      lastSlideMessage: 'This is the last project',
+    },
+    breakpoints: {
+      320: {
+        slidesPerView: 1.2,
+        spaceBetween: 16
+      },
+      768: {
+        slidesPerView: 1.8,
+        spaceBetween: 28
+      },
+      1024: {
+        slidesPerView: 3,
+        spaceBetween: 48
+      }
+    },
+    on: {
+      slideChange: function() {
+        preloadAdjacentImages(this.realIndex);
+      }
+    }
   });
+
+  // Slide click routing (handles both normal & cloned slides)
+  gallerySwiper.on('click', function(swiper, event) {
+    const slide = event.target.closest('.swiper-slide');
+    if (!slide) return;
+    const indexAttr = slide.getAttribute('data-index');
+    if (indexAttr !== null) {
+      openLightbox(parseInt(indexAttr));
+    }
+  });
+
+  // Immediate Pause on Hover
+  swiperContainer.addEventListener('mouseenter', handleSwiperMouseEnter);
+  swiperContainer.addEventListener('mouseleave', handleSwiperMouseLeave);
+
+  // Touch controls for mobile to suspend autoplay
+  gallerySwiper.on('touchStart', () => {
+    if (gallerySwiper && gallerySwiper.autoplay) gallerySwiper.autoplay.stop();
+  });
+  gallerySwiper.on('touchEnd', () => {
+    if (gallerySwiper && gallerySwiper.autoplay) gallerySwiper.autoplay.start();
+  });
+}
+
+function handleSwiperMouseEnter() {
+  if (gallerySwiper && gallerySwiper.autoplay) {
+    gallerySwiper.autoplay.stop();
+  }
+}
+
+function handleSwiperMouseLeave() {
+  if (gallerySwiper && gallerySwiper.autoplay) {
+    gallerySwiper.autoplay.start();
+  }
 }
 
 function catLabel(cat) { 
@@ -382,17 +540,122 @@ document.querySelectorAll('.filter-btn').forEach(btn=>{
 /* ============================================================
    LIGHTBOX
 ============================================================ */
-function openLightbox(idx){ lightboxIndex=idx; updateLightbox(); document.getElementById('lightbox').classList.add('active'); document.body.style.overflow='hidden'; }
+/* ============================================================
+   LIGHTBOX MODAL & PRELOADING
+============================================================ */
+function openLightbox(idx){
+  lightboxIndex=idx;
+  const lightbox = document.getElementById('lightbox');
+  lightbox.classList.add('active');
+  document.body.style.overflow='hidden';
+  
+  updateLightbox();
+  
+  // A11y Focus management
+  lightbox.focus();
+  lightbox.addEventListener('keydown', trapLightboxFocus);
+}
+
+function trapLightboxFocus(e) {
+  const lightbox = document.getElementById('lightbox');
+  if (!lightbox.classList.contains('active')) return;
+  
+  const focusables = lightbox.querySelectorAll('button, [tabindex="0"]');
+  if (focusables.length === 0) return;
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  
+  if (e.key === 'Tab') {
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        last.focus();
+        e.preventDefault();
+      }
+    } else {
+      if (document.activeElement === last) {
+        first.focus();
+        e.preventDefault();
+      }
+    }
+  }
+}
+
 function updateLightbox(){
   const item=visibleItems[lightboxIndex];
   if(!item) return;
-  document.getElementById('lightboxImg').src=item.src;
-  document.getElementById('lightboxTitle').textContent=item.title||'';
-  document.getElementById('lightboxCat').textContent=catLabel(item.category);
+  
+  const img = document.getElementById('lightboxImg');
+  const title = document.getElementById('lightboxTitle');
+  const cat = document.getElementById('lightboxCat');
+  const desc = document.getElementById('lightboxDesc');
+  const loc = document.getElementById('lightboxLoc');
+
+  // Trigger cinematic opacity crossfade state
+  img.classList.add('changing');
+  
+  setTimeout(() => {
+    img.src = item.src;
+    img.alt = item.title || catLabel(item.category);
+    
+    title.textContent = item.title || 'Untitled Project';
+    cat.textContent = catLabel(item.category);
+    desc.textContent = item.desc || 'A signature high-end design by Ruthra Design Studio. We carefully craft structural architecture and refined interior layouts.';
+    
+    // Support dynamic or demo location markers
+    if (item.location) {
+      loc.style.display = 'flex';
+      loc.querySelector('span').textContent = item.location;
+    } else {
+      const demoLocations = ['India', 'Oman', 'Gulf Region'];
+      loc.style.display = 'flex';
+      loc.querySelector('span').textContent = demoLocations[lightboxIndex % 3];
+    }
+
+    img.onload = () => {
+      img.classList.remove('changing');
+    };
+    
+    if (img.complete) {
+      img.classList.remove('changing');
+    }
+
+    // Preload neighboring elements
+    preloadNeighboringImages();
+  }, 150);
+
   document.getElementById('lightboxPrev').style.opacity=lightboxIndex>0?'1':'0.3';
   document.getElementById('lightboxNext').style.opacity=lightboxIndex<visibleItems.length-1?'1':'0.3';
 }
-function closeLightbox(){ document.getElementById('lightbox').classList.remove('active'); document.body.style.overflow=''; }
+
+function preloadNeighboringImages() {
+  if (lightboxIndex > 0 && visibleItems[lightboxIndex - 1]) {
+    const prevImg = new Image();
+    prevImg.src = visibleItems[lightboxIndex - 1].src;
+  }
+  if (lightboxIndex < visibleItems.length - 1 && visibleItems[lightboxIndex + 1]) {
+    const nextImg = new Image();
+    nextImg.src = visibleItems[lightboxIndex + 1].src;
+  }
+}
+
+function preloadAdjacentImages(realIndex) {
+  if (visibleItems[realIndex + 1]) {
+    const img = new Image();
+    img.src = visibleItems[realIndex + 1].src;
+  }
+  if (visibleItems[realIndex - 1]) {
+    const img = new Image();
+    img.src = visibleItems[realIndex - 1].src;
+  }
+}
+
+function closeLightbox(){
+  const lightbox = document.getElementById('lightbox');
+  lightbox.classList.remove('active');
+  document.body.style.overflow='';
+  lightbox.removeEventListener('keydown', trapLightboxFocus);
+}
+
 document.getElementById('lightboxClose').addEventListener('click',closeLightbox);
 document.getElementById('lightbox').addEventListener('click',e=>{ if(e.target===document.getElementById('lightbox')) closeLightbox(); });
 document.getElementById('lightboxPrev').addEventListener('click',()=>{ if(lightboxIndex>0){lightboxIndex--;updateLightbox();} });
@@ -559,7 +822,15 @@ document.querySelectorAll('a[href^="#"]').forEach(link=>{
       target.scrollIntoView({behavior:'smooth',block:'start'}); 
       const collapse=document.querySelector('.navbar-collapse'); 
       if(collapse&&collapse.classList.contains('show')) {
-        new bootstrap.Collapse(collapse).hide();
+        if (typeof bootstrap !== 'undefined') {
+          const bsCollapse = bootstrap.Collapse.getInstance(collapse) || new bootstrap.Collapse(collapse);
+          bsCollapse.hide();
+        } else {
+          // Robust vanilla fallback
+          collapse.classList.remove('show');
+          const toggler = document.querySelector('.navbar-toggler');
+          if (toggler) toggler.classList.add('collapsed');
+        }
       }
     }
   });
