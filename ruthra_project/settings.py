@@ -1,5 +1,8 @@
 import os
 from pathlib import Path
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Safe imports for optional production packages (graceful local degradation)
 try:
@@ -23,8 +26,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-ruthra-architects-pre
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 # Configure allowed hosts from environment variable, fallback to '*'
-ALLOWED_HOSTS = ['ruthra-1.onrender.com',]
-
+ALLOWED_HOSTS = [
+    'ruthra-1.onrender.com',
+    '127.0.0.1',
+    'localhost',
+]
 CSRF_TRUSTED_ORIGINS = [
     'https://ruthra-1.onrender.com',
 ]
@@ -36,6 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'cloudinary_storage',
+    'cloudinary',
+
     'portfolio',  # Our custom portfolio application
 ]
 
@@ -151,3 +161,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 STATICFILES_DIRS = []
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
