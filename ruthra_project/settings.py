@@ -23,7 +23,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-ruthra-architects-pre
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 # Configure allowed hosts from environment variable, fallback to '*'
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['ruthra-1.onrender.com',]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://ruthra-1.onrender.com',
