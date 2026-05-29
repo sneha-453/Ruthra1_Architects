@@ -4,7 +4,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-# Safe imports for optional production packages (graceful local degradation)
+# Safe imports for optional production packages
 try:
     import dj_database_url
 except ImportError:
@@ -16,25 +16,28 @@ try:
 except ImportError:
     HAS_WHITENOISE = False
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-ruthra-architects-premium-secure-key-2026')
+# Security
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'django-insecure-ruthra-architects-premium-secure-key-2026'
+)
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-# Configure allowed hosts from environment variable, fallback to '*'
 ALLOWED_HOSTS = [
     'ruthra-1.onrender.com',
     '127.0.0.1',
     'localhost',
 ]
+
 CSRF_TRUSTED_ORIGINS = [
     'https://ruthra-1.onrender.com',
 ]
-# Application definition
+
+# Applications
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,11 +49,16 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'cloudinary',
 
-    'portfolio',  # Our custom portfolio application
+    'portfolio',
 ]
 
+# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    # WhiteNoise middleware
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -58,14 +66,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-if HAS_WHITENOISE:
-    # Insert WhiteNoiseMiddleware directly after SecurityMiddleware
-    try:
-        security_idx = MIDDLEWARE.index('django.middleware.security.SecurityMiddleware')
-        MIDDLEWARE.insert(security_idx + 1, 'whitenoise.middleware.WhiteNoiseMiddleware')
-    except ValueError:
-        MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
 
 ROOT_URLCONF = 'ruthra_project.urls'
 
@@ -88,13 +88,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ruthra_project.wsgi.application'
 
 # Database
-# Using SQLite as default for a local SQL database with zero configuration required
-# In production, parses database connection string from environment if dj-database-url is available
 if dj_database_url and os.environ.get('DATABASE_URL'):
     DATABASES = {
-        'default': dj_database_url.config(
-            conn_max_age=600
-        )
+        'default': dj_database_url.config(conn_max_age=600)
     }
 else:
     DATABASES = {
@@ -105,7 +101,6 @@ else:
     }
 
 # Password validation
-# Standard security validations for user accounts
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -127,45 +122,35 @@ TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
+# Static files
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Enable WhiteNoise compression and caching for static files in production if available
-if HAS_WHITENOISE:
-    STORAGES = {
-        "default": {
-            "BACKEND": "django.core.files.storage.FileSystemStorage",
-        },
-        "staticfiles": {
-            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-        },
-    }
-else:
-    STORAGES = {
-        "default": {
-            "BACKEND": "django.core.files.storage.FileSystemStorage",
-        },
-        "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        },
-    }
-
-# Media files (User uploaded files - Gallery Images)
+# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-STATICFILES_DIRS = []
-
+# Cloudinary configuration
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# Django 5 storage configuration
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Render HTTPS support
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+STATICFILES_DIRS = []
