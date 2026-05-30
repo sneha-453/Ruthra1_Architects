@@ -90,7 +90,10 @@ WSGI_APPLICATION = 'ruthra_project.wsgi.application'
 # Database
 if dj_database_url and os.environ.get('DATABASE_URL'):
     DATABASES = {
-        'default': dj_database_url.config(conn_max_age=600)
+        'default': dj_database_url.config(
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
 else:
     DATABASES = {
