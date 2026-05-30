@@ -4,17 +4,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-# Safe imports for optional production packages
-try:
-    import dj_database_url
-except ImportError:
-    dj_database_url = None
-
-try:
-    import whitenoise
-    HAS_WHITENOISE = True
-except ImportError:
-    HAS_WHITENOISE = False
+import dj_database_url
 
 # Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,14 +17,16 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
+# ✅ FIXED ALLOWED HOSTS (IMPORTANT)
 ALLOWED_HOSTS = [
-    'ruthra-1.onrender.com',
-    '127.0.0.1',
+    'ruthra1-architects.onrender.com',
     'localhost',
+    '127.0.0.1',
 ]
 
+# ✅ FIXED CSRF (IMPORTANT)
 CSRF_TRUSTED_ORIGINS = [
-    'https://ruthra-1.onrender.com',
+    'https://ruthra1-architects.onrender.com',
 ]
 
 # Applications
@@ -55,8 +47,6 @@ INSTALLED_APPS = [
 # Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-
-    # WhiteNoise middleware
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -87,36 +77,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ruthra_project.wsgi.application'
 
-# Database
-if dj_database_url and os.environ.get('DATABASE_URL'):
-    DATABASES = {
-        'default': dj_database_url.config(
-            conn_max_age=600,
-            conn_health_checks=True,
-        )
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+# Database (Render PostgreSQL or SQLite fallback)
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 # Internationalization
@@ -129,18 +104,26 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Media files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Media files (Cloudinary handles uploads)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Cloudinary configuration
+# Cloudinary config
+cloudinary.config(
+    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.environ.get('CLOUDINARY_API_KEY'),
+    api_secret=os.environ.get('CLOUDINARY_API_SECRET')
+)
+
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
-# Django 5 storage configuration
+# Storage settings
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
@@ -150,7 +133,6 @@ STORAGES = {
     },
 }
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Render HTTPS support
