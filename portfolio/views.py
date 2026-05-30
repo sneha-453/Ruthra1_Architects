@@ -215,7 +215,8 @@ def api_gallery_delete(request):
         
         return JsonResponse({'status': 'success', 'message': 'Image deleted from database and file system.'})
     except GalleryItem.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'Gallery item not found.'}, status=444)
+        return JsonResponse({'status': 'error', 'message': 'Gallery item not found.'}, status=404)
+
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
