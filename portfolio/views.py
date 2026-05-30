@@ -15,9 +15,16 @@ def index_view(request):
     items = GalleryItem.objects.all()
     items_list = []
     for item in items:
+        # Cloudinary may be misconfigured (e.g., missing CLOUDINARY_CLOUD_NAME)
+        # which can raise when evaluating item.image.url. Avoid crashing the page.
+        try:
+            src = item.image.url
+        except Exception:
+            src = ''
+
         items_list.append({
             'id': str(item.id),
-            'src': item.image.url,
+            'src': src,
             'category': item.category,
             'title': item.title or '',
             'desc': item.description or '',
@@ -40,9 +47,16 @@ def api_gallery_list(request):
     items = GalleryItem.objects.all()
     items_list = []
     for item in items:
+        # Cloudinary may be misconfigured (e.g., missing CLOUDINARY_CLOUD_NAME)
+        # which can raise when evaluating item.image.url. Avoid crashing the API.
+        try:
+            src = item.image.url
+        except Exception:
+            src = ''
+
         items_list.append({
             'id': str(item.id),
-            'src': item.image.url,
+            'src': src,
             'category': item.category,
             'title': item.title or '',
             'desc': item.description or '',
