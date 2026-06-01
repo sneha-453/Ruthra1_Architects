@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class GalleryItem(models.Model):
     CATEGORY_CHOICES = [
         ('villas', 'Villas'),
@@ -10,7 +11,9 @@ class GalleryItem(models.Model):
     
     title = models.CharField(max_length=200, blank=True, null=True)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='villas')
+
     image = models.ImageField(upload_to='gallery/')
+
     description = models.TextField(blank=True, null=True)
     is_visible = models.BooleanField(default=True)
     order = models.IntegerField(default=0)
