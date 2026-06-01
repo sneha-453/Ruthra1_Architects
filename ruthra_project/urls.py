@@ -1,11 +1,9 @@
 from django.contrib import admin
-from django.urls import path
-from django.http import HttpResponse
-
-def home(request):
-    return HttpResponse("Site Working 🚀")
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home),
+
+    # Portfolio website
+    path('', include('portfolio.urls')),
 ]
