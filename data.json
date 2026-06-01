@@ -3,11 +3,11 @@
   "model": "admin.logentry",
   "pk": 1,
   "fields": {
-    "action_time": "2026-05-25T15:04:17.906Z",
+    "action_time": "2026-06-01T07:49:12.396Z",
     "user": 1,
     "content_type": 8,
     "object_id": "1",
-    "object_repr": "Home",
+    "object_repr": "increament",
     "action_flag": 1,
     "change_message": "[{\"added\": {}}]"
   }
@@ -16,78 +16,13 @@
   "model": "admin.logentry",
   "pk": 2,
   "fields": {
-    "action_time": "2026-05-25T15:04:46.359Z",
+    "action_time": "2026-06-01T16:29:06.286Z",
     "user": 1,
     "content_type": 8,
-    "object_id": "1",
-    "object_repr": "Home",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Order\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 3,
-  "fields": {
-    "action_time": "2026-05-25T15:07:05.106Z",
-    "user": 1,
-    "content_type": 7,
-    "object_id": "2",
-    "object_repr": "Message from  on 2026-05-25 15:07",
+    "object_id": "13",
+    "object_repr": "building",
     "action_flag": 1,
     "change_message": "[{\"added\": {}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 4,
-  "fields": {
-    "action_time": "2026-05-25T15:24:28.592Z",
-    "user": 2,
-    "content_type": 7,
-    "object_id": "3",
-    "object_repr": "Message from ssd on 2026-05-25 15:10",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Is read\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 5,
-  "fields": {
-    "action_time": "2026-05-25T15:37:17.032Z",
-    "user": 2,
-    "content_type": 8,
-    "object_id": "2",
-    "object_repr": "edad334e916ffce9cfade850f7b18157",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Order\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 6,
-  "fields": {
-    "action_time": "2026-05-25T15:37:17.036Z",
-    "user": 2,
-    "content_type": 8,
-    "object_id": "3",
-    "object_repr": "54a143bc7b5c08a1618dbe31a66c5ee1",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Order\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 7,
-  "fields": {
-    "action_time": "2026-05-25T15:37:17.038Z",
-    "user": 2,
-    "content_type": 8,
-    "object_id": "1",
-    "object_repr": "Home",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Order\"]}}]"
   }
 },
 {
@@ -131,7 +66,7 @@
   "pk": 5,
   "fields": {
     "name": "Can add permission",
-    "content_type": 2,
+    "content_type": 3,
     "codename": "add_permission"
   }
 },
@@ -140,7 +75,7 @@
   "pk": 6,
   "fields": {
     "name": "Can change permission",
-    "content_type": 2,
+    "content_type": 3,
     "codename": "change_permission"
   }
 },
@@ -149,7 +84,7 @@
   "pk": 7,
   "fields": {
     "name": "Can delete permission",
-    "content_type": 2,
+    "content_type": 3,
     "codename": "delete_permission"
   }
 },
@@ -158,7 +93,7 @@
   "pk": 8,
   "fields": {
     "name": "Can view permission",
-    "content_type": 2,
+    "content_type": 3,
     "codename": "view_permission"
   }
 },
@@ -167,7 +102,7 @@
   "pk": 9,
   "fields": {
     "name": "Can add group",
-    "content_type": 3,
+    "content_type": 2,
     "codename": "add_group"
   }
 },
@@ -176,7 +111,7 @@
   "pk": 10,
   "fields": {
     "name": "Can change group",
-    "content_type": 3,
+    "content_type": 2,
     "codename": "change_group"
   }
 },
@@ -185,7 +120,7 @@
   "pk": 11,
   "fields": {
     "name": "Can delete group",
-    "content_type": 3,
+    "content_type": 2,
     "codename": "delete_group"
   }
 },
@@ -194,7 +129,7 @@
   "pk": 12,
   "fields": {
     "name": "Can view group",
-    "content_type": 3,
+    "content_type": 2,
     "codename": "view_group"
   }
 },
@@ -382,34 +317,16 @@
   "model": "auth.user",
   "pk": 1,
   "fields": {
-    "password": "pbkdf2_sha256$720000$YFT2IQlT1BjMnrWXLaeVTf$yHhOEx3Pjzh68Nsmtmfuch48oc4hczBySTiMW7RVIVo=",
-    "last_login": "2026-05-27T15:06:30.282Z",
-    "is_superuser": true,
-    "username": "arun",
-    "first_name": "",
-    "last_name": "",
-    "email": "arundio74@gmail.com",
-    "is_staff": true,
-    "is_active": true,
-    "date_joined": "2026-05-25T13:41:34.674Z",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 2,
-  "fields": {
-    "password": "pbkdf2_sha256$720000$s02t2hHA2vCPnfRzUHGEFe$SCnwCiq2GLgGYcDfQM01B1Z5IuDeCjJ0oG4PmMmh/nQ=",
-    "last_login": "2026-05-30T13:55:00.378Z",
+    "password": "pbkdf2_sha256$1200000$lRyQIpeseikgWZLl5YwX1F$EqDTXOO4okBiKaxC5Pm/d1P3kiwpTljgICfvKjulvdw=",
+    "last_login": "2026-06-01T16:27:02.058Z",
     "is_superuser": true,
     "username": "admin",
     "first_name": "",
     "last_name": "",
-    "email": "admin@example.com",
+    "email": "arulsneha453@gmail.com",
     "is_staff": true,
     "is_active": true,
-    "date_joined": "2026-05-25T13:56:24.936Z",
+    "date_joined": "2026-06-01T07:48:19.124Z",
     "groups": [],
     "user_permissions": []
   }
@@ -427,7 +344,7 @@
   "pk": 2,
   "fields": {
     "app_label": "auth",
-    "model": "permission"
+    "model": "group"
   }
 },
 {
@@ -435,7 +352,7 @@
   "pk": 3,
   "fields": {
     "app_label": "auth",
-    "model": "group"
+    "model": "permission"
   }
 },
 {
@@ -480,213 +397,55 @@
 },
 {
   "model": "sessions.session",
-  "pk": "15mkucsuwa6jjlg6kavygis4yl7d9myh",
+  "pk": "2n65pwkabpt7oe7ot3exfmzfk0hm5xdr",
   "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSE8Rkpduu83kBkGpGogKe3K-O_apAvd3nPOfYmA21rC1tMSZhYXYcTpdyOMj1R3wHestyZjq-syk9wVedAup8bpeT3cv4OCvXxrrRW6FG3GDI6Q2GujRzsQeHBqyBaMU5whIhKgJRqj1mflmXMEMiDeH-tuOD4:1wRWFt:l1kBZa3wgba_a3AHCRLIjFE6ohLuKhUWeLZYg1OVT2I",
-    "expire_date": "2026-06-08T14:26:09.560Z"
+    "session_data": ".eJxVjDsOwjAQBe_iGln-x1DS5wzWer2LA8iR4qRC3B0ipYD2zcx7iQTbWtPWaUlTERehxel3y4APajsod2i3WeLc1mXKclfkQbsc50LP6-H-HVTo9Vsrq5zLPrgSC3mbMZJmMMrjAMEjWY6FNTJYGhgYQ1DRsFYA0ZyV9eL9AfKJOFQ:1wU0IA:5PPBrYLibVBitYwyVfI-k182zcbxLbeFxgi_0URJRyE",
+    "expire_date": "2026-06-15T10:54:46.917Z"
   }
 },
 {
   "model": "sessions.session",
-  "pk": "1tmflzdsx1dkcqmetjtrsvbalbs6tvm1",
+  "pk": "a5rsesu4fyysqiraerm4dlzvs7s1ncrv",
   "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSE8Rkpduu83kBkGpGogKe3K-O_apAvd3nPOfYmA21rC1tMSZhYXYcTpdyOMj1R3wHestyZjq-syk9wVedAup8bpeT3cv4OCvXxrrRW6FG3GDI6Q2GujRzsQeHBqyBaMU5whIhKgJRqj1mflmXMEMiDeH-tuOD4:1wRXLk:SZS32rel8qhNZgS4isTjSqVgVV_lVjVEUJUAiuT6Kb8",
-    "expire_date": "2026-06-08T15:36:16.587Z"
+    "session_data": ".eJxVjDsOwjAQBe_iGln-x1DS5wzWer2LA8iR4qRC3B0ipYD2zcx7iQTbWtPWaUlTERehxel3y4APajsod2i3WeLc1mXKclfkQbsc50LP6-H-HVTo9Vsrq5zLPrgSC3mbMZJmMMrjAMEjWY6FNTJYGhgYQ1DRsFYA0ZyV9eL9AfKJOFQ:1wTzEC:1zxc00J3BqNnsGxYPqwP_0BwfBMhozwCQKFFRGPPwUA",
+    "expire_date": "2026-06-15T09:46:36.943Z"
   }
 },
 {
   "model": "sessions.session",
-  "pk": "b0letyi8spkpkd6uj6fgqkc98cr71w8w",
+  "pk": "bgalp0ulh8owzlzwpbgmsws9u2itu11e",
   "fields": {
-    "session_data": ".eJxVjMsOwiAURP-FtSGBgty6dO83kPsAqRpISrsy_rtt0oWuJplzZt4q4rqUuPY0x0nURRl1-u0I-ZnqDuSB9d40t7rME-ld0Qft-tYkva6H-3dQsJdtncfBWmclnIU9pAAjbUkIzI5otBmyM4mzR8skaFyw4CHI4L0Hx4P6fAHzczgc:1wSFq2:1IHoFlYldqjoqD4X-16kLC-Ba-yes8RyLKO0fE1FGS4",
-    "expire_date": "2026-06-10T15:06:30.286Z"
+    "session_data": ".eJxVjDsOwjAQBe_iGln-x1DS5wzWer2LA8iR4qRC3B0ipYD2zcx7iQTbWtPWaUlTERehxel3y4APajsod2i3WeLc1mXKclfkQbsc50LP6-H-HVTo9Vsrq5zLPrgSC3mbMZJmMMrjAMEjWY6FNTJYGhgYQ1DRsFYA0ZyV9eL9AfKJOFQ:1wU0IE:VvOOkmeTqEQdOnO8TAzb9-YhH37ywg93LFVebKpx7NE",
+    "expire_date": "2026-06-15T10:54:50.138Z"
   }
 },
 {
   "model": "sessions.session",
-  "pk": "c1uwnrbj6y30zcooqsoqeq6xpu9pjcp3",
+  "pk": "gudp4pe6nnoqnlqkzbyj773rhfsrazh0",
   "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSE8Rkpduu83kBkGpGogKe3K-O_apAvd3nPOfYmA21rC1tMSZhYXYcTpdyOMj1R3wHestyZjq-syk9wVedAup8bpeT3cv4OCvXxrrRW6FG3GDI6Q2GujRzsQeHBqyBaMU5whIhKgJRqj1mflmXMEMiDeH-tuOD4:1wSSjn:emsvTJYVPu_5WzIxnO6OZdVYDofBbQoVV52djp1tGMI",
-    "expire_date": "2026-06-11T04:52:55.320Z"
+    "session_data": ".eJxVjDsOwjAQBe_iGln-x1DS5wzWer2LA8iR4qRC3B0ipYD2zcx7iQTbWtPWaUlTERehxel3y4APajsod2i3WeLc1mXKclfkQbsc50LP6-H-HVTo9Vsrq5zLPrgSC3mbMZJmMMrjAMEjWY6FNTJYGhgYQ1DRsFYA0ZyV9eL9AfKJOFQ:1wU0IH:Xr8wtOYFDb7Rijb_ETUqgQ3G4yhW30A6Xlg_B0x2Crs",
+    "expire_date": "2026-06-15T10:54:53.450Z"
   }
 },
 {
   "model": "sessions.session",
-  "pk": "fnjev33az3ltjns501cssoju9l4qwvvr",
+  "pk": "zwa2dahxaf5hk9eezoc7y7cqa8yirlqr",
   "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSE8Rkpduu83kBkGpGogKe3K-O_apAvd3nPOfYmA21rC1tMSZhYXYcTpdyOMj1R3wHestyZjq-syk9wVedAup8bpeT3cv4OCvXxrrRW6FG3GDI6Q2GujRzsQeHBqyBaMU5whIhKgJRqj1mflmXMEMiDeH-tuOD4:1wSqkF:bZHs9FDQBDvKhHmKNBRPOGH_H4T-C8huNsuCZ3Z_y1A",
-    "expire_date": "2026-06-12T06:30:59.622Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "grkkfnpf3a59k0kgovvcvkv2bt1zlncq",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSE8Rkpduu83kBkGpGogKe3K-O_apAvd3nPOfYmA21rC1tMSZhYXYcTpdyOMj1R3wHestyZjq-syk9wVedAup8bpeT3cv4OCvXxrrRW6FG3GDI6Q2GujRzsQeHBqyBaMU5whIhKgJRqj1mflmXMEMiDeH-tuOD4:1wSEji:6zFa4XSwUB0lN8oKmwlBcx3jy7EVQUdWV2_dDrUp6mY",
-    "expire_date": "2026-06-10T13:55:54.525Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "jd7mp40zmwz2q4hde5e4gcmqlqbs0fan",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSE8Rkpduu83kBkGpGogKe3K-O_apAvd3nPOfYmA21rC1tMSZhYXYcTpdyOMj1R3wHestyZjq-syk9wVedAup8bpeT3cv4OCvXxrrRW6FG3GDI6Q2GujRzsQeHBqyBaMU5whIhKgJRqj1mflmXMEMiDeH-tuOD4:1wTK9U:xbUiKAvf_T88H6sS6ougbgGcCLCnLC87QSMT-BnMMQg",
-    "expire_date": "2026-06-13T13:55:00.399Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "nejhdybwtrhtroqjjgn9kfuexoecstn7",
-  "fields": {
-    "session_data": ".eJxVjDkOwjAUBe_iGlneYvwp6XOGyH8JDiBHipMKcXeIlALaNzPvpYa8rWXYmizDxOqirDr9bpjpIXUHfM_1Nmua67pMqHdFH7TpfmZ5Xg_376DkVr41dNaL7WJKAcZzFODEhNGLRAAyhomJOkAfnEEYA_rMYDB4x8GxNer9Ad3bN90:1wRVoi:uXtmQ3YeiKCj9pHKliPXNA24gudmq3zoL2uMDC3yuTQ",
-    "expire_date": "2026-06-08T13:58:04.160Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "p3mrv7qvveroxaje2gpf8mwc9wexot0f",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAURP-FtSGBgty6dO83kPsAqRpISrsy_rtt0oWuJplzZt4q4rqUuPY0x0nURRl1-u0I-ZnqDuSB9d40t7rME-ld0Qft-tYkva6H-3dQsJdtncfBWmclnIU9pAAjbUkIzI5otBmyM4mzR8skaFyw4CHI4L0Hx4P6fAHzczgc:1wSEkM:qmlsfdKuvhLOkjfqd-EAonERSOMn-Xhv65dw0aWXtAQ",
-    "expire_date": "2026-06-10T13:56:34.051Z"
+    "session_data": ".eJxVjDsOwjAQBe_iGln-x1DS5wzWer2LA8iR4qRC3B0ipYD2zcx7iQTbWtPWaUlTERehxel3y4APajsod2i3WeLc1mXKclfkQbsc50LP6-H-HVTo9Vsrq5zLPrgSC3mbMZJmMMrjAMEjWY6FNTJYGhgYQ1DRsFYA0ZyV9eL9AfKJOFQ:1wU5Ti:32aQW02cxCnxrbC2xdo43t7MSopH4YqEUSgsyDEoDgY",
+    "expire_date": "2026-06-15T16:27:02.096Z"
   }
 },
 {
   "model": "portfolio.galleryitem",
-  "pk": 2,
+  "pk": 13,
   "fields": {
-    "title": "edad334e916ffce9cfade850f7b18157",
-    "category": "villas",
-    "image": "media/gallery/edad334e916ffce9cfade850f7b18157_wagygf",
-    "description": "",
-    "is_visible": true,
-    "order": 2,
-    "created_at": "2026-05-25T15:36:29.411Z"
-  }
-},
-{
-  "model": "portfolio.galleryitem",
-  "pk": 3,
-  "fields": {
-    "title": "54a143bc7b5c08a1618dbe31a66c5ee1",
-    "category": "villas",
-    "image": "media/gallery/54a143bc7b5c08a1618dbe31a66c5ee1_fjo2kc",
-    "description": "",
-    "is_visible": true,
-    "order": 3,
-    "created_at": "2026-05-25T15:36:42.612Z"
-  }
-},
-{
-  "model": "portfolio.galleryitem",
-  "pk": 4,
-  "fields": {
-    "title": "e0901fce5aa5c561965db8d07c519a71",
+    "title": "building",
     "category": "commercial",
-    "image": "media/gallery/e0901fce5aa5c561965db8d07c519a71_hruu85",
+    "image": "gallery/WhatsApp_Image_2026-03-31_at_12.01.42_PM.jpeg",
     "description": "",
     "is_visible": true,
-    "order": 3,
-    "created_at": "2026-05-27T15:07:45.089Z"
-  }
-},
-{
-  "model": "portfolio.galleryitem",
-  "pk": 5,
-  "fields": {
-    "title": "50f246c3a6042da719e8e490923aa520",
-    "category": "renovation",
-    "image": "media/gallery/50f246c3a6042da719e8e490923aa520_cudapf",
-    "description": "",
-    "is_visible": true,
-    "order": 3,
-    "created_at": "2026-05-27T15:08:18.657Z"
-  }
-},
-{
-  "model": "portfolio.galleryitem",
-  "pk": 6,
-  "fields": {
-    "title": "24643523f1c404708ff8409e4a2c3657",
-    "category": "renovation",
-    "image": "media/gallery/24643523f1c404708ff8409e4a2c3657_x7kl41",
-    "description": "",
-    "is_visible": true,
-    "order": 4,
-    "created_at": "2026-05-27T15:08:35.856Z"
-  }
-},
-{
-  "model": "portfolio.galleryitem",
-  "pk": 7,
-  "fields": {
-    "title": "e8b4feb8fc5976f8e2cc47178a586725",
-    "category": "villas",
-    "image": "media/gallery/e8b4feb8fc5976f8e2cc47178a586725_swjjcd",
-    "description": "",
-    "is_visible": true,
-    "order": 5,
-    "created_at": "2026-05-27T15:09:21.485Z"
-  }
-},
-{
-  "model": "portfolio.galleryitem",
-  "pk": 8,
-  "fields": {
-    "title": "5d6045825a1b0445868c61f4791b0bb3",
-    "category": "villas",
-    "image": "media/gallery/5d6045825a1b0445868c61f4791b0bb3_slq6z8",
-    "description": "",
-    "is_visible": true,
-    "order": 6,
-    "created_at": "2026-05-27T15:09:44.053Z"
-  }
-},
-{
-  "model": "portfolio.contactmessage",
-  "pk": 1,
-  "fields": {
-    "name": "arun",
-    "email": "arundio74@gmail.com",
-    "phone": "+91 8248019310",
-    "message": "ecnewochie2",
-    "is_read": true,
-    "created_at": "2026-05-25T15:05:29.740Z"
-  }
-},
-{
-  "model": "portfolio.contactmessage",
-  "pk": 2,
-  "fields": {
-    "name": "",
-    "email": "",
-    "phone": "",
-    "message": "",
-    "is_read": true,
-    "created_at": "2026-05-25T15:07:05.094Z"
-  }
-},
-{
-  "model": "portfolio.contactmessage",
-  "pk": 3,
-  "fields": {
-    "name": "ssd",
-    "email": "dwd@gmail.com",
-    "phone": "+91 388949940",
-    "message": "f4b43rhv",
-    "is_read": true,
-    "created_at": "2026-05-25T15:10:15.026Z"
-  }
-},
-{
-  "model": "portfolio.contactmessage",
-  "pk": 4,
-  "fields": {
-    "name": "Arun",
-    "email": "arundio74@gmail.com",
-    "phone": "+91 8248019310",
-    "message": "wdewfevdv",
-    "is_read": false,
-    "created_at": "2026-05-25T15:28:41.890Z"
+    "order": 0,
+    "created_at": "2026-06-01T16:29:06.227Z"
   }
 }
 ]
