@@ -1,0 +1,105 @@
+/* ============================================================
+   CONTACT
+============================================================ */
+.contact-section { padding: 90px 0; background: #f2f4f7; }
+.contact-info-item {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(6,21,43,.07);
+}
+.contact-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  color: var(--gold);
+  flex-shrink: 0;
+  transition: all .3s;
+}
+.contact-info-item:hover .contact-icon { background: var(--gold); color: var(--navy); }
+.contact-info-text h6 {
+  font-family: var(--font-accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 2px;
+}
+.contact-info-text p { font-size: 13.5px; color: var(--navy); margin: 0; }
+.contact-form .form-control {
+  border: 1px solid rgba(6,21,43,.14);
+  border-radius: 10px;
+  padding: 13px 16px;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--navy);
+  transition: border-color .3s;
+  background: var(--white);
+}
+.contact-form .form-control:focus { box-shadow: none; border-color: var(--gold); background: var(--white); }
+.contact-form textarea { min-height: 120px; resize: none; }
+
+.phone-input{
+    gap:10px;
+}
+.country-code{
+    max-height: 140px; /* control dropdown height */
+    overflow-y: auto;
+    max-width: 120px;
+}
+
+.country-code option{
+    font-size: 13px;
+    padding: 4px;
+}
+
+.phone-input .form-control{
+    border-radius:10px;
+}
+
+.contact-info-text a{
+    text-decoration:none;
+    color:inherit;
+}
+
+.contact-info-text a:hover{
+    color:#c9a96e;
+}
+
+textarea.form-control{
+    resize:none;
+}
+
+/* ============================================================
+   CONTACT STRIP
+============================================================ */
+.contact-strip {
+  background: rgba(6,21,43,.97);
+  border-top: 1px solid rgba(212,175,55,.15);
+  padding: 14px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+.strip-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255,255,255,.55);
+  font-size: 12px;
+  text-decoration: none;
+  transition: color .3s;
+}
+.strip-item:hover { color: var(--gold); }
+.strip-item i { color: var(--gold); font-size: 15px; }
+@media (max-width: 576px) {
+  .contact-strip { gap: 16px; flex-direction: column; padding: 20px 16px; }
+}

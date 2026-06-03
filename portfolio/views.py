@@ -150,7 +150,7 @@ def api_gallery_upload(request):
         
     try:
         image_file = request.FILES.get('image')
-        category = request.POST.get('category', 'villas')
+        category = request.POST.get('category', 'Residential Villas')
         title = request.POST.get('title', '').strip()
         description = request.POST.get('description', '').strip()
 

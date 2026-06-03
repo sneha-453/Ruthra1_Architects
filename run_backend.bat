@@ -23,7 +23,7 @@ exit /b
 
 :: Step 1: Create Virtual Environment if not exists
 if exist ".venv" goto venv_exists
-echo [1/6] Creating Python Virtual Environment...
+echo [1/5] Creating Python Virtual Environment...
 python -m venv .venv
 if %errorlevel% equ 0 goto venv_exists
 color 0C
@@ -32,10 +32,10 @@ pause
 exit /b
 
 :venv_exists
-echo [1/6] Python Virtual Environment found.
+echo [1/5] Python Virtual Environment found.
 
 :: Step 2: Activate Virtual Environment
-echo [2/6] Activating Virtual Environment...
+echo [2/5] Activating Virtual Environment...
 call .venv\Scripts\activate
 if %errorlevel% equ 0 goto venv_activated
 color 0C
@@ -46,7 +46,7 @@ exit /b
 :venv_activated
 
 :: Step 3: Install Dependencies
-echo [3/6] Installing dependencies - Django, openpyxl, pillow...
+echo [3/5] Installing dependencies - Django, openpyxl, pillow...
 python -m pip install --upgrade pip >nul 2>&1
 pip install -r requirements.txt
 if %errorlevel% equ 0 goto pip_ok
@@ -57,17 +57,13 @@ exit /b
 
 :pip_ok
 
-:: Step 4: Migrate front-end CSS assets
-echo [4/6] Migrating static asset files...
-python migrate_assets.py
-
-:: Step 5: Database Migrations
-echo [5/6] Generating and executing SQL database migrations...
+:: Step 4: Database Migrations
+echo [4/5] Generating and executing SQL database migrations...
 python manage.py makemigrations portfolio
 python manage.py migrate
 
-:: Step 6: Create default superuser
-echo [6/6] Creating secure default admin user...
+:: Step 5: Create default superuser
+echo [5/5] Creating secure default admin user...
 python create_default_admin.py
 
 echo.

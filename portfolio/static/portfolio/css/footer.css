@@ -1,0 +1,74 @@
+/* ============================================================
+   FOOTER
+============================================================ */
+.footer {
+  background: var(--navy);
+  padding: 56px 0 28px;
+  border-top: 1px solid rgba(212,175,55,.15);
+}
+.footer-logo { margin-bottom: 18px; }
+.footer-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+.footer-logo-text .name { font-family: var(--font-accent); font-size: 13px; font-weight: 700; color: var(--white); letter-spacing: 2px; }
+.footer-logo-text .sub { font-family: var(--font-accent); font-size: 8px; font-weight: 400; color: var(--gold); letter-spacing: 3px; }
+.footer-desc { font-size: 12.5px; line-height: 1.8; color: rgba(255,255,255,.45); max-width: 270px; margin-bottom: 20px; }
+.footer-heading {
+  font-family: var(--font-accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 18px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(212,175,55,.15);
+}
+.footer-links { list-style: none; padding: 0; }
+.footer-links li { margin-bottom: 9px; }
+.footer-links a {
+  font-size: 12.5px;
+  color: rgba(255,255,255,.45);
+  text-decoration: none;
+  transition: color .3s;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.footer-links a::before {
+  width: 10px;
+  height: 1px;
+  background: var(--gold);
+  transition: width .3s;
+  flex-shrink: 0;
+}
+.footer-links a:hover { color: var(--gold); }
+.footer-links a:hover::before { width: 18px; }
+.social-icons { display: flex; gap: 10px; margin-top: 20px; }
+.social-icon {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(212,175,55,.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,.45);
+  font-size: 13px;
+  text-decoration: none;
+  transition: all .3s;
+}
+.social-icon:hover { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+.footer-bottom {
+  margin-top: 44px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(212,175,55,.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.footer-bottom p { font-size: 11px; color: rgba(255,255,255,.3); margin: 0; }
+.footer-bottom span { color: var(--gold); }
+@media (max-width: 576px) {
+  .footer-bottom { text-align: center; justify-content: center; }
+  .footer-desc { max-width: 100%; }
+}

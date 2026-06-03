@@ -65,7 +65,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
 @admin.register(GalleryItem)
 class GalleryItemAdmin(admin.ModelAdmin):
     list_display = ('thumbnail', 'title', 'category', 'is_visible', 'order', 'created_at')
-    list_editable = ('is_visible', 'order')
+    list_editable = ('title', 'category', 'is_visible', 'order')
     list_filter = ('category', 'is_visible', 'created_at')
     search_fields = ('title', 'description')
     ordering = ('order', '-created_at')
@@ -107,16 +107,38 @@ class GalleryItemAdmin(admin.ModelAdmin):
                         continue
                         
                     title = row[0]
-                    category = str(row[1] or '').strip().lower()
+                    category_input = str(row[1] or '').strip()
                     image_url = row[2]
                     description = row[3]
                     order = row[4]
 
-                    # Validation
-                    if not category or category not in ['villas', 'interiors', 'commercial', 'renovation']:
+                    # Category mapping/normalization
+                    category_mapping = {
+                        'elevation design': 'Elevation Design',
+                        'residential houses': 'Residential Houses',
+                        'residential villas': 'Residential Villas',
+                        'interior design': 'Interior Design',
+                        'landscape design': 'Landscape Design',
+                        'commercial buildings': 'Commercial Buildings',
+                        'renovation & remodeling': 'Renovation & Remodeling',
+                        'renovation and remodeling': 'Renovation & Remodeling',
+                        # Fallbacks for old categories
+                        'villas': 'Residential Villas',
+                        'interiors': 'Interior Design',
+                        'commercial': 'Commercial Buildings',
+                        'renovation': 'Renovation & Remodeling',
+                    }
+
+                    category_lower = category_input.lower()
+                    if not category_input or category_lower not in category_mapping:
                         error_count += 1
-                        error_details.append(f"Row {r_idx}: Invalid category '{category}'. Must be 'villas', 'interiors', 'commercial', or 'renovation'.")
+                        error_details.append(
+                            f"Row {r_idx}: Invalid category '{category_input}'. "
+                            "Must be one of the seven new categories (e.g. 'Elevation Design', 'Residential Houses', etc.)."
+                        )
                         continue
+                    
+                    category = category_mapping[category_lower]
                     
                     if not image_url:
                         error_count += 1
@@ -182,8 +204,8 @@ class GalleryItemAdmin(admin.ModelAdmin):
         ws.append(["Title", "Category", "Image URL", "Description", "Order"])
         
         # Sample rows for guide
-        ws.append(["Luxury Villa Beachfront", "villas", "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&q=80", "Modern beachfront villa with pool", 1])
-        ws.append(["Elegant Penthouse Living", "interiors", "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=600&q=80", "Minimalist living room interior design", 2])
+        ws.append(["Luxury Villa Beachfront", "Residential Villas", "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&q=80", "Modern beachfront villa with pool", 1])
+        ws.append(["Elegant Penthouse Living", "Interior Design", "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=600&q=80", "Minimalist living room interior design", 2])
 
         # Write buffer
         response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")

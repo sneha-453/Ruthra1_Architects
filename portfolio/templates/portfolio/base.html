@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="Ruthra Architects - Modern Architecture, Interiors & Luxury Living. Premium architecture and interior design studio.">
+  <meta name="keywords" content="architecture, interior design, luxury, modern, Ruthra Architects">
+  <title>Ruthra Architects</title>
+  
+  <link rel="icon" type="image/png" href="https://res.cloudinary.com/dgxrbt5yn/image/upload/v1779434491/Group_1_1_sfrq4h.png">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Poppins:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS CDNs -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  
+  <!-- Main entry styling -->
+  <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}">
+  
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+
+  {% block content %}
+  {% endblock %}
+
+  <!-- BOOTSTRAPPED SQL DATA -->
+  <script id="gallery-data" type="application/json">{{ gallery_items_json|safe }}</script>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <!-- Main Script -->
+  <script src="{% static 'portfolio/js/script.js' %}"></script>
+</body>
+</html>

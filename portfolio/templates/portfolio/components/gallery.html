@@ -1,0 +1,31 @@
+<!-- ============================================================
+     GALLERY
+============================================================ */ -->
+<section class="gallery-section" id="gallery">
+  <div class="container">
+    <div class="text-center fade-in mb-4">
+      <div class="section-tag justify-content-center"><div class="line"></div><span>Our Work</span><div class="line"></div></div>
+      <h2 class="section-title white">Project Gallery</h2>
+      <p class="gallery-subtitle">"We don't just sell plans; we design your dreams into reality."</p>
+    </div>
+    <div class="d-flex align-items-center flex-wrap gap-3 mb-4 fade-in">
+      <div class="gallery-filters" id="galleryFilters">
+        <!-- Dynamically rendered category buttons -->
+      </div>
+      <span class="gallery-count-badge" id="galleryCount"></span>
+    </div>
+    <div class="gallery-slider-viewport">
+      <!-- Swiper Slider Container -->
+      <div class="swiper gallery-swiper">
+        <div class="swiper-wrapper" id="galleryGrid"></div>
+      </div>
+      <!-- Premium Cinematic Navigation buttons outside swiper-wrapper but inside viewport -->
+      <button class="swiper-nav-btn swiper-nav-prev" id="swiperPrevBtn" aria-label="Previous project"><i class="fas fa-chevron-left"></i></button>
+      <button class="swiper-nav-btn swiper-nav-next" id="swiperNextBtn" aria-label="Next project"><i class="fas fa-chevron-right"></i></button>
+    </div>
+    <div id="galleryEmpty" class="gallery-empty" style="display:none;">
+      <i class="fas fa-images"></i>
+      No images yet. 
+    </div>
+  </div>
+</section>

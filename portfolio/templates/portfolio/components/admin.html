@@ -1,0 +1,150 @@
+<!-- ============================================================
+     ADMIN FAB
+============================================================ -->
+<button class="admin-fab" id="adminFabBtn" title="Gallery Admin">
+  <span class="admin-fab-label">GALLERY ADMIN</span>
+  <i class="fas fa-cog"></i>
+</button>
+
+<!-- ============================================================
+     LOGIN MODAL
+============================================================ -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal-box">
+    <button class="modal-close" id="loginClose" aria-label="Close"><i class="fas fa-times"></i></button>
+    <div class="modal-title">Admin Access</div>
+    <div class="modal-subtitle">GALLERY MANAGEMENT PANEL</div>
+    
+    <div class="form-group mb-2">
+        <input type="text" class="admin-input w-100" id="adminUsername" placeholder="Enter admin username" style="margin-bottom:10px;">
+    </div>
+    <div class="form-group mb-2">
+        <input type="password" class="admin-input w-100" id="adminPassword" placeholder="Enter admin password" autocomplete="current-password">
+    </div>
+    <div class="login-error" id="loginError">Incorrect username or password. Please try again.</div>
+    <button class="btn-gold-static" style="width:100%;justify-content:center;" id="loginBtn">
+      LOGIN <span class="arrow"><i class="fas fa-arrow-right"></i></span>
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================
+     ADMIN DRAWER
+============================================================ -->
+<div class="admin-drawer" id="adminDrawer">
+  <div class="admin-drawer-header">
+    <div>
+      <div class="admin-drawer-title">Gallery Manager</div>
+      <div class="admin-drawer-subtitle">Ruthra Architects Admin</div>
+    </div>
+    <button class="drawer-close" id="drawerClose" aria-label="Close">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <div class="admin-drawer-body">
+
+    <!-- STATS BAR -->
+    <div class="admin-stats-bar" id="adminStats">
+      <div class="admin-stat">
+        <div class="admin-stat-num" id="statTotal">0</div>
+        <div class="admin-stat-label">Total</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-num" id="statVillas">0</div>
+        <div class="admin-stat-label">Residential Villas</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-num" id="statCommercial">0</div>
+        <div class="admin-stat-label">Commercial Buildings</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-num" id="statOther">0</div>
+        <div class="admin-stat-label">Other</div>
+      </div>
+    </div>
+
+    <!-- TABS HEADER -->
+    <div class="admin-actions-bar">
+      <div class="tab-btns" style="margin-bottom:0;">
+        <button class="tab-btn active" data-tab="upload">Upload Images</button>
+        <button class="tab-btn" data-tab="manage">Manage Gallery</button>
+      </div>
+      <a href="/admin/" target="_blank" rel="noopener noreferrer" class="btn-outline-gold"
+        style="font-family:var(--font-accent); font-size:9px; padding:6px 12px; text-decoration:none; border:1px solid var(--gold); border-radius:3px;">
+        <i class="fas fa-shield-alt"></i> DJANGO ADMIN
+      </a>
+    </div>
+
+    <!-- UPLOAD TAB -->
+    <div class="tab-content active" id="tab-upload">
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept="image/*" multiple aria-label="Upload File">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p>Drag &amp; drop images here or click to browse</p>
+        <small>JPG, PNG, WEBP • Multiple files supported</small>
+      </div>
+      <div class="preview-grid" id="previewGrid"></div>
+
+      <div id="uploadForm" style="display:none; margin-top:18px;">
+        <div class="form-group">
+          <label class="form-label-admin" for="uploadCategory">Category</label>
+          <select class="admin-select" id="uploadCategory">
+            <option value="Elevation Design">Elevation Design</option>
+            <option value="Residential Houses">Residential Houses</option>
+            <option value="Residential Villas">Residential Villas</option>
+            <option value="Interior Design">Interior Design</option>
+            <option value="Landscape Design">Landscape Design</option>
+            <option value="Commercial Buildings">Commercial Buildings</option>
+            <option value="Renovation & Remodeling">Renovation &amp; Remodeling</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label-admin" for="uploadTitle">Project Title (optional)</label>
+          <input type="text" class="admin-input" id="uploadTitle"
+            placeholder="e.g. Modern Villa – Kanyakumari" style="margin-bottom:0;">
+        </div>
+        <div class="form-group">
+          <label class="form-label-admin" for="uploadDesc">Description (optional)</label>
+          <textarea class="admin-textarea" id="uploadDesc"
+            placeholder="Brief description of this project..."></textarea>
+        </div>
+        <div class="upload-progress-wrap" id="progressWrap">
+          <div class="upload-progress-bar">
+            <div class="upload-progress-fill" id="progressFill"></div>
+          </div>
+          <div class="upload-status" id="progressStatus">Processing...</div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:18px;">
+          <button class="btn-gold-static" style="flex:1; justify-content:center;" id="uploadBtn">
+            <i class="fas fa-upload"></i> ADD TO GALLERY
+          </button>
+          <button class="btn-outline-gold" id="clearPreviewBtn" style="padding:11px 18px;">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANAGE TAB -->
+    <div class="tab-content" id="tab-manage">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <span style="font-family:var(--font-accent); font-size:10px; color:rgba(255,255,255,.35); letter-spacing:1px;">
+          MANAGE ALL IMAGES
+        </span>
+        <button class="btn-danger-sm" id="clearAllBtn">
+          <i class="fas fa-trash"></i> Clear All
+        </button>
+      </div>
+      <div id="manageList">
+        <div class="manage-empty">
+          <i class="fas fa-images"></i> No images in gallery yet.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+<!-- DRAWER OVERLAY -->
+<div id="drawerOverlay"></div>

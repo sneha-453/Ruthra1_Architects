@@ -3,14 +3,17 @@ from django.db import models
 
 class GalleryItem(models.Model):
     CATEGORY_CHOICES = [
-        ('villas', 'Villas'),
-        ('interiors', 'Interiors'),
-        ('commercial', 'Commercial'),
-        ('renovation', 'Renovation'),
+        ('Elevation Design', 'Elevation Design'),
+        ('Residential Houses', 'Residential Houses'),
+        ('Residential Villas', 'Residential Villas'),
+        ('Interior Design', 'Interior Design'),
+        ('Landscape Design', 'Landscape Design'),
+        ('Commercial Buildings', 'Commercial Buildings'),
+        ('Renovation & Remodeling', 'Renovation & Remodeling'),
     ]
     
     title = models.CharField(max_length=200, blank=True, null=True)
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='villas')
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Residential Villas')
 
     image = models.ImageField(upload_to='gallery/')
 

@@ -11,6 +11,16 @@ let visibleItems = [];
 let isAdminLoggedIn = false;
 let gallerySwiper = null;
 
+const CATEGORIES = {
+  ELEVATION:   'Elevation Design',
+  HOUSES:      'Residential Houses',
+  VILLAS:      'Residential Villas',
+  INTERIORS:   'Interior Design',
+  LANDSCAPE:   'Landscape Design',
+  COMMERCIAL:  'Commercial Buildings',
+  RENOVATION:  'Renovation & Remodeling',
+};
+
 /* ============================================================
    CSRF TOKEN HELPER
 ============================================================ */
@@ -76,17 +86,15 @@ async function syncGallery() {
 }
 
 /* ============================================================
-   GALLERY FILTERS (DYNAMIC CATEGORIES)
+   CATEGORY LABEL HELPER
 ============================================================ */
 function catLabel(cat) {
-  return {
-    villas: 'Villas',
-    interiors: 'Interiors',
-    commercial: 'Commercial',
-    renovation: 'Renovation'
-  }[cat] || cat;
+  return cat;
 }
 
+/* ============================================================
+   GALLERY FILTERS (DYNAMIC CATEGORIES)
+============================================================ */
 function renderCategoryFilters() {
   const filterContainer = document.getElementById('galleryFilters');
   if (!filterContainer) return;
@@ -271,15 +279,20 @@ function preloadAdjacentImages(realIndex) {
    ADMIN STATS
 ============================================================ */
 function updateAdminStats() {
-  const statTotal = document.getElementById('statTotal');
-  const statVillas = document.getElementById('statVillas');
-  const statInteriors = document.getElementById('statInteriors');
-  const statOther = document.getElementById('statOther');
+  const statTotal      = document.getElementById('statTotal');
+  const statVillas     = document.getElementById('statVillas');
+  const statCommercial = document.getElementById('statCommercial');
+  const statOther      = document.getElementById('statOther');
 
-  if (statTotal) statTotal.textContent = galleryItems.length;
-  if (statVillas) statVillas.textContent = galleryItems.filter(i => i.category === 'villas').length;
-  if (statInteriors) statInteriors.textContent = galleryItems.filter(i => i.category === 'interiors').length;
-  if (statOther) statOther.textContent = galleryItems.filter(i => i.category === 'commercial' || i.category === 'renovation').length;
+  const total      = galleryItems.length;
+  const villas     = galleryItems.filter(i => i.category === CATEGORIES.VILLAS).length;
+  const commercial = galleryItems.filter(i => i.category === CATEGORIES.COMMERCIAL).length;
+  const other      = total - villas - commercial;
+
+  if (statTotal)      statTotal.textContent      = total;
+  if (statVillas)     statVillas.textContent     = villas;
+  if (statCommercial) statCommercial.textContent = commercial;
+  if (statOther)      statOther.textContent      = other;
 }
 
 /* ============================================================
@@ -385,7 +398,7 @@ function renderManageList() {
    FILE INPUT PREVIEWS
 ============================================================ */
 const uploadZone = document.getElementById('uploadZone');
-const fileInput = document.getElementById('fileInput');
+const fileInput  = document.getElementById('fileInput');
 const previewGrid = document.getElementById('previewGrid');
 const uploadForm = document.getElementById('uploadForm');
 
@@ -411,7 +424,7 @@ function handleFiles(files) {
   if (!files.length) return;
 
   const valid = files.filter(f => f.size <= MAX_FILE_SIZE_MB * 1024 * 1024);
-  const skip = files.length - valid.length;
+  const skip  = files.length - valid.length;
 
   if (skip) showToast(`${skip} file(s) exceed ${MAX_FILE_SIZE_MB}MB and were skipped.`, 'error');
   if (!valid.length) return;
@@ -432,15 +445,13 @@ function handleFiles(files) {
 
 function renderPreview() {
   previewGrid.innerHTML = pendingFiles
-    .map(
-      (f, idx) => `
+    .map((f, idx) => `
       <div class="preview-thumb">
         <img src="${f.src}" alt="">
         <button class="preview-remove" data-idx="${idx}"><i class="fas fa-times"></i></button>
         <div class="preview-cat-badge" id="badge_${idx}">—</div>
       </div>
-    `
-    )
+    `)
     .join('');
 
   previewGrid.querySelectorAll('.preview-remove').forEach(btn => {
@@ -462,7 +473,6 @@ function renderPreview() {
 function updatePreviewBadges() {
   const cat = document.getElementById('uploadCategory')?.value;
   if (!cat) return;
-
   document.querySelectorAll('[id^="badge_"]').forEach(el => (el.textContent = catLabel(cat)));
 }
 
@@ -483,14 +493,13 @@ document.getElementById('uploadBtn')?.addEventListener('click', async () => {
     return;
   }
 
-  const category = document.getElementById('uploadCategory').value;
-  const title = document.getElementById('uploadTitle').value.trim();
-  const desc = document.getElementById('uploadDesc').value.trim();
-
-  const progressWrap = document.getElementById('progressWrap');
-  const progressFill = document.getElementById('progressFill');
+  const category      = document.getElementById('uploadCategory').value;
+  const title         = document.getElementById('uploadTitle').value.trim();
+  const desc          = document.getElementById('uploadDesc').value.trim();
+  const progressWrap  = document.getElementById('progressWrap');
+  const progressFill  = document.getElementById('progressFill');
   const progressStatus = document.getElementById('progressStatus');
-  const btn = document.getElementById('uploadBtn');
+  const btn           = document.getElementById('uploadBtn');
 
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> UPLOADING...';
@@ -504,9 +513,9 @@ document.getElementById('uploadBtn')?.addEventListener('click', async () => {
     const file = pendingFiles[i];
 
     const formData = new FormData();
-    formData.append('image', file.rawFile);
-    formData.append('category', category);
-    formData.append('title', title || file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '));
+    formData.append('image',       file.rawFile);
+    formData.append('category',    category);
+    formData.append('title',       title);
     formData.append('description', desc);
 
     try {
@@ -526,9 +535,9 @@ document.getElementById('uploadBtn')?.addEventListener('click', async () => {
         }
       } else {
         const text = await res.text();
-        if (res.status === 403) lastError = 'Security check failed (CSRF token error). Please log out and log in again.';
+        if (res.status === 403)                         lastError = 'Security check failed (CSRF token error). Please log out and log in again.';
         else if (res.status === 401 || text.includes('login')) lastError = 'Session expired or unauthorized. Please log in again.';
-        else lastError = `Server error (${res.status}).`;
+        else                                            lastError = `Server error (${res.status}).`;
       }
     } catch (e) {
       console.error('Network error uploading file ' + file.name, e);
@@ -536,7 +545,7 @@ document.getElementById('uploadBtn')?.addEventListener('click', async () => {
     }
 
     const pct = Math.round(((i + 1) / count) * 100);
-    progressFill.style.width = pct + '%';
+    progressFill.style.width   = pct + '%';
     progressStatus.textContent = `Processing ${i + 1} of ${count}...`;
   }
 
@@ -546,7 +555,7 @@ document.getElementById('uploadBtn')?.addEventListener('click', async () => {
   previewGrid.innerHTML = '';
   uploadForm.style.display = 'none';
   document.getElementById('uploadTitle').value = '';
-  document.getElementById('uploadDesc').value = '';
+  document.getElementById('uploadDesc').value  = '';
   progressWrap.classList.remove('show');
   progressFill.style.width = '0%';
 
@@ -587,7 +596,6 @@ function openLightbox(idx) {
 
   updateLightbox();
 
-  // A11y focus management
   lightbox.focus();
   lightbox.addEventListener('keydown', trapLightboxFocus);
 }
@@ -600,19 +608,13 @@ function trapLightboxFocus(e) {
   if (!focusables.length) return;
 
   const first = focusables[0];
-  const last = focusables[focusables.length - 1];
+  const last  = focusables[focusables.length - 1];
 
   if (e.key === 'Tab') {
     if (e.shiftKey) {
-      if (document.activeElement === first) {
-        last.focus();
-        e.preventDefault();
-      }
+      if (document.activeElement === first) { last.focus(); e.preventDefault(); }
     } else {
-      if (document.activeElement === last) {
-        first.focus();
-        e.preventDefault();
-      }
+      if (document.activeElement === last)  { first.focus(); e.preventDefault(); }
     }
   }
 }
@@ -621,11 +623,11 @@ function updateLightbox() {
   const item = visibleItems[lightboxIndex];
   if (!item) return;
 
-  const img = document.getElementById('lightboxImg');
+  const img   = document.getElementById('lightboxImg');
   const title = document.getElementById('lightboxTitle');
-  const cat = document.getElementById('lightboxCat');
-  const desc = document.getElementById('lightboxDesc');
-  const loc = document.getElementById('lightboxLoc');
+  const cat   = document.getElementById('lightboxCat');
+  const desc  = document.getElementById('lightboxDesc');
+  const loc   = document.getElementById('lightboxLoc');
 
   img.classList.add('changing');
 
@@ -634,8 +636,8 @@ function updateLightbox() {
     img.alt = item.title || catLabel(item.category);
 
     title.textContent = item.title || 'Untitled Project';
-    cat.textContent = catLabel(item.category);
-    desc.textContent = item.desc || 'A signature high-end design by Ruthra Design Studio. We carefully craft structural architecture and refined interior layouts.';
+    cat.textContent   = catLabel(item.category);
+    desc.textContent  = item.desc || 'A signature high-end design by Ruthra Design Studio. We carefully craft structural architecture and refined interior layouts.';
 
     if (item.location) {
       loc.style.display = 'flex';
@@ -679,16 +681,10 @@ document.getElementById('lightbox')?.addEventListener('click', e => {
   if (e.target === document.getElementById('lightbox')) closeLightbox();
 });
 document.getElementById('lightboxPrev')?.addEventListener('click', () => {
-  if (lightboxIndex > 0) {
-    lightboxIndex--;
-    updateLightbox();
-  }
+  if (lightboxIndex > 0) { lightboxIndex--; updateLightbox(); }
 });
 document.getElementById('lightboxNext')?.addEventListener('click', () => {
-  if (lightboxIndex < visibleItems.length - 1) {
-    lightboxIndex++;
-    updateLightbox();
-  }
+  if (lightboxIndex < visibleItems.length - 1) { lightboxIndex++; updateLightbox(); }
 });
 
 document.addEventListener('keydown', e => {
@@ -696,14 +692,8 @@ document.addEventListener('keydown', e => {
   if (!lb || !lb.classList.contains('active')) return;
 
   if (e.key === 'Escape') closeLightbox();
-  if (e.key === 'ArrowLeft' && lightboxIndex > 0) {
-    lightboxIndex--;
-    updateLightbox();
-  }
-  if (e.key === 'ArrowRight' && lightboxIndex < visibleItems.length - 1) {
-    lightboxIndex++;
-    updateLightbox();
-  }
+  if (e.key === 'ArrowLeft'  && lightboxIndex > 0)                        { lightboxIndex--; updateLightbox(); }
+  if (e.key === 'ArrowRight' && lightboxIndex < visibleItems.length - 1)  { lightboxIndex++; updateLightbox(); }
 });
 
 /* ============================================================
@@ -743,9 +733,9 @@ document.getElementById('loginModal')?.addEventListener('click', e => {
 
 async function tryLogin() {
   const usernameEl = document.getElementById('adminUsername');
-  const pwEl = document.getElementById('adminPassword');
-  const username = usernameEl?.value.trim();
-  const pw = pwEl?.value;
+  const pwEl       = document.getElementById('adminPassword');
+  const username   = usernameEl?.value.trim();
+  const pw         = pwEl?.value;
 
   if (!username || !pw) {
     showToast('Please fill in both fields.', 'error');
@@ -862,8 +852,8 @@ document.getElementById('clearAllBtn')?.addEventListener('click', async () => {
 function showToast(msg, type = 'success') {
   const icons = {
     success: 'fa-check-circle',
-    error: 'fa-exclamation-circle',
-    info: 'fa-info-circle'
+    error:   'fa-exclamation-circle',
+    info:    'fa-info-circle'
   };
 
   const container = document.getElementById('toastContainer');
@@ -944,12 +934,12 @@ document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 document.getElementById('contactForm')?.addEventListener('submit', async function (e) {
   e.preventDefault();
 
-  const btn = this.querySelector('button[type=submit]');
+  const btn  = this.querySelector('button[type=submit]');
   const orig = btn?.innerHTML;
 
-  const name = document.getElementById('contactName')?.value?.trim() || '';
-  const email = document.getElementById('contactEmail')?.value?.trim() || '';
-  const phone = (document.getElementById('contactCountry')?.value || '') + ' ' + (document.getElementById('contactPhone')?.value || '').trim();
+  const name    = document.getElementById('contactName')?.value?.trim()    || '';
+  const email   = document.getElementById('contactEmail')?.value?.trim()   || '';
+  const phone   = (document.getElementById('contactCountry')?.value || '') + ' ' + (document.getElementById('contactPhone')?.value || '').trim();
   const message = document.getElementById('contactMessage')?.value?.trim() || '';
 
   if (btn) {
@@ -987,17 +977,11 @@ document.getElementById('contactForm')?.addEventListener('submit', async functio
       }, 3000);
     } else {
       showToast(data.message || 'Failed to submit form.', 'error');
-      if (btn) {
-        btn.innerHTML = orig;
-        btn.disabled = false;
-      }
+      if (btn) { btn.innerHTML = orig; btn.disabled = false; }
     }
   } catch (e2) {
     showToast('Failed to connect to backend server.', 'error');
-    if (btn) {
-      btn.innerHTML = orig;
-      btn.disabled = false;
-    }
+    if (btn) { btn.innerHTML = orig; btn.disabled = false; }
   }
 });
 

@@ -1,0 +1,134 @@
+/* ============================================================
+   NAVBAR
+============================================================ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 9000;
+  padding: 14px 0;
+  transition: all .4s ease;
+  background: transparent;
+}
+.navbar.scrolled {
+  background: rgba(13,27,42,.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(212,175,55,.2);
+  padding: 8px 0;
+  box-shadow: 0 8px 32px rgba(0,0,0,.3);
+}
+.navbar .container-fluid { padding-left: 24px; padding-right: 24px; }
+.navbar-brand { display: flex; align-items: center; height: 52px; text-decoration: none; }
+.brand-logo { max-height: 50px; max-width: 220px; width: auto; height: auto; object-fit: contain; transition: transform .3s; }
+.brand-logo:hover { transform: scale(1.03); }
+.navbar-nav .nav-link {
+  font-family: var(--font-accent);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--white) !important;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 8px 12px !important;
+  position: relative;
+  transition: color .3s;
+}
+.navbar-nav .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transition: transform .3s;
+}
+.navbar-nav .nav-link:hover::after,
+.navbar-nav .nav-link.active::after { transform: scaleX(1); }
+.navbar-nav .nav-link:hover { color: var(--gold) !important; }
+.navbar-toggler {
+  border: none !important;
+  padding: 8px 10px;
+  outline: none;
+  box-shadow: none !important;
+  display: none !important; /* Hidden on desktop screens */
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+  width: 42px;
+  height: 38px;
+  background: rgba(13, 27, 42, 0.85) !important; /* Premium dark glass contrast */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 9999;
+}
+.navbar-toggler:hover {
+  background: rgba(21, 34, 54, 0.95) !important;
+  border-color: var(--gold-light) !important;
+  box-shadow: 0 0 12px rgba(212,175,55,0.4) !important;
+}
+.navbar-toggler .toggler-icon {
+  width: 22px;
+  height: 2.5px; /* Thicker for excellent high-definition visibility */
+  background-color: var(--gold) !important;
+  display: block;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-origin: center;
+}
+/* Transform to X when expanded (not collapsed) */
+.navbar-toggler:not(.collapsed) .top-bar {
+  transform: translateY(7.5px) rotate(45deg) !important;
+  background-color: var(--gold-light) !important;
+}
+.navbar-toggler:not(.collapsed) .middle-bar {
+  opacity: 0 !important;
+  transform: scale(0) !important;
+}
+.navbar-toggler:not(.collapsed) .bottom-bar {
+  transform: translateY(-7.5px) rotate(-45deg) !important;
+  background-color: var(--gold-light) !important;
+}
+
+@media (max-width: 991px) {
+  .navbar-toggler {
+    display: flex !important; /* Only visible on small and medium screens */
+  }
+  .navbar-collapse {
+    background: rgba(13, 27, 42, 0.98);
+    padding: 24px;
+    margin-top: 12px;
+    border: 1px solid rgba(212,175,55,.2);
+    border-radius: 8px;
+    box-shadow: 0 12px 36px rgba(0,0,0,.6);
+    z-index: 9999;
+    position: relative;
+    transition: all 0.4s ease-in-out;
+  }
+  .navbar-nav {
+    text-align: center;
+    gap: 12px !important;
+    padding: 10px 0;
+  }
+  .navbar-nav .nav-link {
+    font-size: 13px;
+    padding: 10px 20px !important;
+    border-radius: 4px;
+    transition: background 0.3s, color 0.3s;
+  }
+  .navbar-nav .nav-link::after {
+    display: none; /* Hide standard underline on mobile for cleaner look */
+  }
+  .navbar-nav .nav-link:hover,
+  .navbar-nav .nav-link.active {
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--gold) !important;
+  }
+  .navbar .container-fluid { padding-left: 16px; padding-right: 16px; }
+}
